@@ -1,8 +1,10 @@
 (function($) {
 
-  var loggedIn = false;
+  var app = this;
 
-  var router = $.sammy('#main-content', function() {
+  app.loggedIn = false;
+
+  app.router = $.sammy('#main-content', function() {
 
     this.use('Template');
 
@@ -14,7 +16,7 @@
 
     this.get('#dashboard', function(context) {
 
-      if(!loggedIn) {
+      if(!app.loggedIn) {
         this.redirect('#/');
         return;
       }
@@ -31,17 +33,16 @@
     });
 
     this.put('#/login', function(context) {
-      console.log('CHICKEN');
+      app.loggedIn = true;
+      // Actual Login Logic Goes Here
       this.redirect('#dashboard');
     });
-
 
   });
 
   $(document).ready(function() {
     // Application code starts here
-    router.run('#/');
-
+    app.router.run('#/');
 
   });
 
