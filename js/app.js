@@ -1,6 +1,7 @@
 (function($) {
 
   var app = this;
+  window.WhereIsMyCar = app; // expose
 
   app.loggedIn = false;
 
@@ -40,10 +41,16 @@
 
   });
 
+  app.initMap = function() {
+    app.map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 39.9526, lng: -75.1652},
+      zoom: 15
+    });
+  };
+
   $(document).ready(function() {
     // Application code starts here
     app.router.run('#/');
-
   });
 
 })(jQuery);
