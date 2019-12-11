@@ -30,7 +30,7 @@ class location {
       }
     }
 
-    return $users;
+    return $locations;
   }
 
   public function findAllFor($userId) {
@@ -38,6 +38,7 @@ class location {
     $stmt = $this->conn->prepare($query);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
+    $result = $stmt->get_result();
 
     $locations = array();
 
@@ -57,22 +58,43 @@ class location {
     return $locations;
   }
 
+  public function findLatestFor($userId) {
+    $query = "SELECT id, latitude, longitude, date, userId FROM " . 
+      $this->table_name . " WHERE userId = ? ORDER BY date DESC LIMIT 1";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $location = json_decode('{}');
+
+    if($result->num_rows > 0) {
+
+      $row = $result->fetch_assoc();
+      $location = array(
+          "id"=>$row["id"],
+          "latitude"=>$row["latitude"],
+          "longitude"=>$row["longitude"],
+          "date"=>$row["date"],
+      );
+
+    }
+
+    $stmt->close();
+    return $location;
+  }
+
   public function create($latitude, $longitude, $userId) {
-
-    $sql = "INSERT INTO " . $this->table_name . " (,password) VALUES (?,?)";
+    $sql = "INSERT INTO " . $this->table_name . " (latitude, longitude, userId, date) VALUES (?,?,?,now())";
     $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $hashed);
-
+    $now = 
+    $stmt->bind_param("ddi", $latitude, $longitude, $userId);
     $stmt->execute();
     $created = false;
     if($stmt->affected_rows > 0) $created = true;
     $stmt->close();
     return $created;
   }
-}
-
-?>
-
 }
 
 ?>
