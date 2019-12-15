@@ -33,25 +33,24 @@ class location {
     return $locations;
   }
 
+
   public function findAllFor($userId) {
     $query = "SELECT id, latitude, longitude, date, userId FROM " . $this->table_name . " WHERE userId = ?";
     $stmt = $this->conn->prepare($query);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->bind_result($id, $latitude, $longitude, $date, $userId);
 
     $locations = array();
 
-    if($result->num_rows > 0) {
-      while($row = $result->fetch_assoc()) {
-        $locations[] = array(
-          "id"=>$row["id"],
-          "latitude"=>$row["latitude"],
-          "longitude"=>$row["longitude"],
-          "date"=>$row["date"],
-          "userId"=>$row["userId"]
-        );
-      }
+    while($stmt->fetch()) {
+      $locations[] = array(
+        "id"=>$id,
+        "latitude"=>$latitude,
+        "longitude"=>$longitude,
+        "date"=>$date,
+        "userId"=>$userId,
+      );
     }
 
     $stmt->close();
@@ -64,20 +63,17 @@ class location {
     $stmt = $this->conn->prepare($query);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->bind_result($id, $latitude, $longitude, $date, $userId);
 
     $location = json_decode('{}');
 
-    if($result->num_rows > 0) {
-
-      $row = $result->fetch_assoc();
+    if($stmt->fetch()) {
       $location = array(
-          "id"=>$row["id"],
-          "latitude"=>$row["latitude"],
-          "longitude"=>$row["longitude"],
-          "date"=>$row["date"],
+        "id"=>$id,
+        "latitude"=>$latitude,
+        "longitude"=>$longitude,
+        "date"=>$date,
       );
-
     }
 
     $stmt->close();
@@ -88,7 +84,7 @@ class location {
     $sql = "INSERT INTO " . $this->table_name . " (latitude, longitude, userId, date) VALUES (?,?,?,now())";
     $stmt = $this->conn->prepare($sql);
     $now = 
-    $stmt->bind_param("ddi", $latitude, $longitude, $userId);
+      $stmt->bind_param("ddi", $latitude, $longitude, $userId);
     $stmt->execute();
     $created = false;
     if($stmt->affected_rows > 0) $created = true;

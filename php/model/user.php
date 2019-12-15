@@ -30,19 +30,18 @@ class User {
   }
 
   public function find($username) {
-    $query = "SELECT * FROM " . $this->table_name . " WHERE username = ?";
+    $query = "SELECT * FROM " . $this->table_name . " WHERE username = ? LIMIT 1";
     $stmt = $this->conn->prepare($query);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result = $stmt->bind_result($rowId, $rowName, $rowPassword);
 
     $user = null;
-    if($result->num_rows > 0) {
-      $row = $result->fetch_assoc();
+    if($stmt->fetch()) {
       $user = array(
-        "id"=>$row["id"],
-        "username"=>$row["username"],
-        "password"=>$row["password"]
+        "id"=>$rowId,
+        "username"=>$rowUsername,
+        "password"=>$rowPassword
       );
     }
     $stmt->close();
