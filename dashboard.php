@@ -75,6 +75,7 @@ $lastParkedLocation = $location->findLatestFor($userId);
       <div class="row">
         <div class="col-lg-8 offset-lg-2">
           <button type="button" class="btn btn-secondary" onClick="dashboard.uploadLocation();">I Just Parked</button>
+          <button type="button" class="btn btn-secondary float-right" onClick="dashboard.updateDirections();">Refresh Directions</button>
         </div>
       </div>
 <?php

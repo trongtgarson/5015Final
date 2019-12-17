@@ -72,22 +72,26 @@
       });
     };
 
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        dashboard.myLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        dashboard.map.setCenter(dashboard.myLocation);
-        dashboard.displayRoute();
-      }, function() {
-        alert('Failed to get location data from your browser');
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      alert('This browser does not support geolocation');
-    }
+    dashboard.updateDirections = function() {
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          dashboard.myLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          dashboard.map.setCenter(dashboard.myLocation);
+          dashboard.displayRoute();
+        }, function() {
+          alert('Failed to get location data from your browser');
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        alert('This browser does not support geolocation');
+      }
+    };
+
+    dashboard.updateDirections();
 
   };
 
