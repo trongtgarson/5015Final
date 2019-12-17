@@ -69,6 +69,23 @@ class User {
 
     return $created;
   }
+
+  public function sendActivationCode($username) {
+
+  }
+
+  public function activateNow($user) {
+    $sql = "UPDATE " . $this->table_name . " SET activatedAt=NOW() WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("d", $user["id"]);
+
+    $stmt->execute();
+    $updated = ($stmt->affected_rows > 0);
+    $stmt->close();
+
+    return $updated;
+
+  }
 }
 
 ?>

@@ -3,7 +3,7 @@ use FA10_5015_tua20258;
 CREATE TABLE `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(100) BINARY NOT NULL,
   `contactName` NVARCHAR(255) NOT NULL,
   `activationCode` VARCHAR(8) NOT NULL,
   `activatedAt` DATETIME NULL,

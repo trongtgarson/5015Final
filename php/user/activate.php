@@ -1,0 +1,50 @@
+<?php
+
+include_once('../config/core.php');
+include_once '../config/database.php';
+include_once '../model/user.php';
+
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST");
+
+$username = $_POST["username"];
+$activationCode = $_POST["activationCode"];
+
+session_start();
+unset($_SESSION["activateError"]);
+
+if(empty($username) || empty($activationCode)) {
+  $_SESSION["username"] = $username;
+  $_SESSION["loginError"] = "Activation Failed";
+  header("location:../../activate.php");
+}
+
+$database = new Database();
+$db = $database->getConnection();
+
+$user = new User($db);
+
+$target = $user->find($username);
+
+if(empty($target) || !empty($target["activatedAt"])) {
+  $_SESSION["activateError"] = "Activation Failed";
+  header("location:../../activate.php");
+} 
+
+if($target["activationCode"] == $activationCode) {
+  if($user->activateNow($target)) {
+    $_SESSION["userId"] = $target["id"];
+    $_SESSION["loginTime"] = time();
+    header("location:../../dashboard.php");
+  } else {
+    $_SESSION["loginError"] = "Activation Failed";
+    header("location:../../activate.php");
+  }
+
+} else {
+  $_SESSION["loginError"] = "Activation Failed";
+  header("location:../../activate.php");
+}
+
+?>

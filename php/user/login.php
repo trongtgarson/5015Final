@@ -33,9 +33,16 @@ if(empty($target)) {
 } 
 
 if(password_verify($password, $target["password"])) {
-  $_SESSION["userId"] = $target["id"];
   $_SESSION["loginTime"] = time();
-  header("location:../../dashboard.php");
+
+  var_dump($target);
+  if(empty($target["activatedAt"])) {
+    $_SESSION["username"] = $target["username"];
+    header("location:../../activate.php");
+  } else {
+    $_SESSION["userId"] = $target["id"];
+    header("location:../../dashboard.php");
+  }
 } else {
   $_SESSION["loginError"] = "Login Failed";
   header("location:../../login.php");

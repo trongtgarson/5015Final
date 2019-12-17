@@ -103,11 +103,14 @@ if(isset($_SESSION["activateError"])) {
                       <i class="fas fa-check-square"></i>
                     </span>
                   </div>
-                  <input type="number" required class="form-control" placeholder="Code" autocomplete="off" name="activationCode"></input>
+<?php
+            $activationCode = isset($_SESSION["activationCode"]) ? $_SESSION["activationCode"] : "";
+            echo "<input type='text' required class='form-control' placeholder='Code' autocomplete='off' name='activationCode' value='{$activationCode}'></input>";
+?>
                 </div>
 
                 <div class="form-group">
-                  <button type="submit" class="btn float-right btn-primary">Login</button>
+                  <button type="submit" class="btn float-right btn-primary">Activate</button>
                 </div>
 
               </form>
