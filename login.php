@@ -38,7 +38,7 @@ if(isset($_SESSION["userId"])) {
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
+      <a class="navbar-brand js-scroll-trigger" href="index.php">Home</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -57,12 +57,24 @@ if(isset($_SESSION["userId"])) {
 
   <header class="masthead">
     <div class="container h-100 align-items-center justify-content-center text-center">
+
+<?php
+  if(isset($_SESSION["loginError"])) {
+    echo "<div class='row'>";
+    echo "<div class='col-lg-4 offset-lg-4 align-self-end'>";
+    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["loginError"] . "</div>";
+    echo "</div>";
+    echo "</div>";
+  }
+?>
+
+
       <div class="row">
         <div class="col-lg-4 offset-lg-4 align-self-end">
           <div class="card">
             <div class="card-header">Sign In</div>
             <div class="card-body">
-              <form action="" id="login-form">
+              <form action="php/user/login.php" method="POST" id="login-form">
 
                 <div class="input-group form-group">
                   <div class="input-group-prepend">
@@ -83,16 +95,10 @@ if(isset($_SESSION["userId"])) {
                 </div>
 
                 <div class="form-group">
-                  <input type="button" value="Login" class="btn float-right btn-primary" onClick="WhereIsMyCar.login()"></input>
+                  <button type="submit" class="btn float-right btn-primary">Login</button>
                 </div>
 
               </form>
-
-<?php
-  if(isset($_SESSION["loginError"])) {
-    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["loginError"] . "</div>";
-  }
-?>
 
 
             </div>
@@ -102,4 +108,23 @@ if(isset($_SESSION["userId"])) {
       </div>
     </div>
   </header>
+
+  <!-- Footer -->
+  <footer class="bg-light py-5">
+    <div class="container">
+      <div class="small text-center text-muted">Copyright &copy; 2019 - Start Bootstrap</div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/creative.min.js"></script>
+
 </body>

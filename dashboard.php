@@ -45,7 +45,9 @@ if(!isset($_SESSION["userId"])) {
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto my-2 my-lg-0">
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#about">Logout</a>
+            <form action="php/user/logout.php" method="POST">
+              <button class="btn btn-link nav-link" type="submit">Logout</button>
+            </form>
           </li>
         </ul>
       </div>

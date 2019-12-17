@@ -1,3 +1,9 @@
+<?php
+  session_start();
+  if(isset($_SESSION["loginError"])){
+    unset($_SESSION["loginError"]);
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
