@@ -1,5 +1,7 @@
 <?php
 
+include_once '../config/core.php';
+
 class User {
   private $conn;
   private $table_name = "users";

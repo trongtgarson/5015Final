@@ -1,5 +1,7 @@
 <?php
 
+include_once '../config/core.php';
+
 class location {
   private $conn;
   private $table_name = "locations";
