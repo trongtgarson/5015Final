@@ -8,16 +8,17 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
-$username = $_POST["username"];
-$activationCode = $_POST["activationCode"];
+$username = $_GET["username"];
+$activationCode = $_GET["activationCode"];
 
 session_start();
 unset($_SESSION["activateError"]);
+unset($_SESSION['activateSuccess']);
 
 if(empty($username) || empty($activationCode)) {
   $_SESSION["username"] = $username;
-  $_SESSION["loginError"] = "Activation Failed";
-  header("location:../../activate.php");
+  $_SESSION["error"] = "Activation Failed";
+  header("location:../../index.php");
 }
 
 $database = new Database();

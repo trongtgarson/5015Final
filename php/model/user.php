@@ -2,6 +2,16 @@
 
 include_once '../config/core.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+include_once('../vendor/phpmailer/phpmailer/src/Exception.php');
+include_once('../vendor/phpmailer/phpmailer/src/PHPMailer.php');
+include_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
+
+
+
 class User {
   private $conn;
   private $table_name = "users";
@@ -72,6 +82,39 @@ class User {
 
   public function sendActivationCode($username) {
 
+    $user = $this->find($username);
+
+    if(empty($user)) { return false; }
+
+    $activationCode = $user["activationCode"];
+
+		$mail= new PHPMailer(true);
+		try { 
+			$mail->SMTPDebug = 2;
+			$mail->IsSMTP();
+			$mail->Host="smtp.gmail.com";
+			$mail->SMTPAuth=true;
+			$mail->Username="cis105223053238@gmail.com"; // Do NOT change
+			$mail->Password = 'g+N3NmtkZWe]m8"M'; // Do NOT change
+			$mail->SMTPSecure = "ssl";
+			$mail->Port=465;
+			$mail->SMTPKeepAlive = true;
+			$mail->Mailer = "smtp";
+			$mail->setFrom(FROM_EMAIL, FROM_NAME); // Change to your email and name
+			$mail->addReplyTo(REPLY_EMAIL, REPLY_NAME); // Change to your email and name
+
+			$msg = "Please click link to complete registration: " . BASE_URL . "php/activate.php?username=$username&activationCode=$activationCode";
+
+			$mail->addAddress($username, $user["contactName"]);
+			$mail->Subject = "Welcome to WhereIsMyCar?";
+			$mail->Body = $msg;
+			$mail->send();
+      return true;
+		} catch (phpmailerException $e) {
+      return false;
+		}
+	
+    return false;
   }
 
   public function activateNow($user) {

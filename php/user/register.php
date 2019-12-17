@@ -4,14 +4,6 @@ include_once('../config/core.php');
 include_once '../config/database.php';
 include_once '../model/user.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-include_once('../vendor/phpmailer/phpmailer/src/Exception.php');
-include_once('../vendor/phpmailer/phpmailer/src/PHPMailer.php');
-include_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
@@ -47,8 +39,13 @@ $user = new User($db);
 
 if(empty($user->find($username))) {
   if($user->create($username, $password, $contactName)) {
-    $_SESSION["username"] = $username;
-    header("location:../../activate.php");
+
+    if($user->sendActivationCode($username)) {
+      registerFailed("Failed to send registration email.");
+    } else {
+      $_SESSION["message"] = "Activation email sent.";
+      header("location:../../index.php");
+    }
   } else {
     registerFailed("Failed to create user");
   }

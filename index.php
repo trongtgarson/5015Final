@@ -57,6 +57,22 @@
     <header class="masthead">
       <div class="container h-100">
 
+<?php
+  if(isset($_SESSION["error"])) {
+    echo "<div class='row'>";
+    echo "<div class='col-lg-4 offset-lg-4 align-self-end'>";
+    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["error"] . "</div>";
+    echo "</div>";
+    echo "</div>";
+  } else if(isset($_SESSION["message"])) {
+    echo "<div class='row'>";
+    echo "<div class='col-lg-4 offset-lg-4 align-self-end'>";
+    echo "<div class='alert alert-success' role='alert'>" . $_SESSION["message"] . "</div>";
+    echo "</div>";
+    echo "</div>";
+  }
+?>
+
         <div class="row h-100 align-items-center justify-content-center text-center">
           <div class="col-lg-10 align-self-end">
             <h1 class="text-white-75 font-weight-light mb-5">Where is my car? </h1>
