@@ -127,7 +127,6 @@ if(isset($_SESSION["userId"])) {
 
 
             </div>
-            <div class="card-footer"><a href="register.php">Register new account</a></div>
 
           </div>
         </div>
