@@ -15,6 +15,7 @@ session_start();
 unset($_SESSION["loginError"]);
 
 if(empty($username) || empty($password)) {
+  $_SESSION["username"] = $username;
   $_SESSION["loginError"] = "Login Failed";
   header("location:../../login.php");
 }

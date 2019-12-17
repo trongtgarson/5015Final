@@ -58,23 +58,31 @@ if(isset($_SESSION["userId"])) {
   <header class="masthead">
     <div class="container h-100 align-items-center justify-content-center text-center">
 
+      <div class="row">
+        <div class="col-lg-4 offset-lg-4 align-self-end">
+          <p class="text-white-75 font-weight-light mb-5">
+            We've sent an email with an activation code to the provided email address. Please enter it below to finalize your account.
+          </p>
+        </div>
+      </div>
+
+
 <?php
-  if(isset($_SESSION["loginError"])) {
+if(isset($_SESSION["activateError"])) {
     echo "<div class='row'>";
     echo "<div class='col-lg-4 offset-lg-4 align-self-end'>";
-    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["loginError"] . "</div>";
+    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["activateError"] . "</div>";
     echo "</div>";
     echo "</div>";
-  }
+}
 ?>
-
 
       <div class="row">
         <div class="col-lg-4 offset-lg-4 align-self-end">
           <div class="card">
-            <div class="card-header">Sign In</div>
+            <div class="card-header">Enter Activation Code</div>
             <div class="card-body">
-              <form action="php/user/login.php" method="POST" id="login-form">
+              <form action="php/user/activate.php" method="POST" id="login-form">
 
                 <div class="input-group form-group">
                   <div class="input-group-prepend">
@@ -92,10 +100,10 @@ if(isset($_SESSION["userId"])) {
                 <div class="input-group form-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
-                      <i class="fas fa-key"></i>
+                      <i class="fas fa-check-square"></i>
                     </span>
                   </div>
-                  <input type="password" required class="form-control" placeholder="Password" autocomplete="off" name="password"></input>
+                  <input type="number" required class="form-control" placeholder="Code" autocomplete="off" name="activationCode"></input>
                 </div>
 
                 <div class="form-group">
@@ -106,7 +114,6 @@ if(isset($_SESSION["userId"])) {
 
 
             </div>
-            <div class="card-footer"><a href="register.php">Register new account</a></div>
 
           </div>
         </div>

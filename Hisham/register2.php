@@ -1,14 +1,6 @@
 <?php
-	session_start();
-    require_once("config.php");
-	use PHPMailer\PHPMailer\PHPMailer;
-	use PHPMailer\PHPMailer\Exception;
-	use PHPMailer\PHPMailer\SMTP;
-
-	require '../PHPMailer-master/src/Exception.php';
-	require '../PHPMailer-master/src/PHPMailer.php';
-	require '../PHPMailer-master/src/SMTP.php';
-	
+  require_once("config.php");
+		session_start();
     $FirstName=$_GET["FirstName"];
     $LastName=$_GET["LastName"];
     $Email=$_GET["Email"];

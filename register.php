@@ -59,27 +59,39 @@ if(isset($_SESSION["userId"])) {
     <div class="container h-100 align-items-center justify-content-center text-center">
 
 <?php
-  if(isset($_SESSION["loginError"])) {
+  if(isset($_SESSION["registerError"])) {
     echo "<div class='row'>";
     echo "<div class='col-lg-4 offset-lg-4 align-self-end'>";
-    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["loginError"] . "</div>";
+    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["registerError"] . "</div>";
     echo "</div>";
     echo "</div>";
   }
 ?>
 
-
       <div class="row">
         <div class="col-lg-4 offset-lg-4 align-self-end">
           <div class="card">
-            <div class="card-header">Sign In</div>
+            <div class="card-header">Welcome</div>
             <div class="card-body">
-              <form action="php/user/login.php" method="POST" id="login-form">
+              <form action="php/user/register.php" method="POST" id="login-form">
 
                 <div class="input-group form-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+
+<?php
+            $contactName = isset($_SESSION["contactName"]) ? $_SESSION["contactName"] : "";
+            echo "<input type='text' required class='form-control' placeholder='Your Name' autocomplete='off' name='contactName' value='{$contactName}'></input>";
+?>
+                </div>
+
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-envelope"></i>
                     </span>
                   </div>
 
@@ -98,8 +110,17 @@ if(isset($_SESSION["userId"])) {
                   <input type="password" required class="form-control" placeholder="Password" autocomplete="off" name="password"></input>
                 </div>
 
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-key"></i>
+                    </span>
+                  </div>
+                  <input type="password" required class="form-control" placeholder="Confirm Password" autocomplete="off" name="passwordConfirm"></input>
+                </div>
+
                 <div class="form-group">
-                  <button type="submit" class="btn float-right btn-primary">Login</button>
+                  <button type="submit" class="btn float-right btn-primary">Create</button>
                 </div>
 
               </form>
