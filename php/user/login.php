@@ -25,24 +25,19 @@ $user = new User($db);
 
 $target = $user->find($username);
 
+session_start();
 if(empty($target)) {
-  http_response_code(401);
-  echo "Login Failed";
-  exit;
+  $_SESSION["loginError"] = "Login Failed";
+  header("location:../../login.php");
 } 
 
 if(password_verify($password, $target["password"])) {
-  http_response_code(200);
-  session_start();
   $_SESSION["userId"] = $target["id"];
   $_SESSION["loginTime"] = time();
-  echo "Success";
+  header("location:../../dashboard.php");
 } else {
-  session_unset();
-  session_destroy();
-  http_response_code(401);
-  echo "Login Failed";
-  exit;
+  $_SESSION["loginError"] = "Login Failed";
+  header("location:../../login.php");
 }
 
 ?>

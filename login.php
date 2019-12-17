@@ -2,12 +2,10 @@
 include_once('php/config/core.php');
 
 session_start();
-$_SESSION["email"] = "";
-if(isset($_SESSION["email"])) {
+if(isset($_SESSION["userId"])) {
   header("location:./dashboard.php");
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -89,6 +87,14 @@ if(isset($_SESSION["email"])) {
                 </div>
 
               </form>
+
+<?php
+  if(isset($_SESSION["loginError"])) {
+    echo "<div class='alert alert-danger' role='alert'>" . $_SESSION["loginError"] . "</div>";
+  }
+?>
+
+
             </div>
 
           </div>
