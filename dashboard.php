@@ -145,7 +145,7 @@ if(!isset($_SESSION["email"])) {
   </script>
 
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs0ei2v6pdX96OavGj_U7rSbmdfCTpxBU&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
   </script>
 
 </body>
