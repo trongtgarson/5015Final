@@ -1,10 +1,24 @@
 <?php
+
 include_once('php/config/core.php');
+include_once 'php/config/database.php';
+include_once 'php/model/location.php';
 
 session_start();
+
+$database = new Database();
+$db = $database->getConnection();
+
 if(!isset($_SESSION["userId"])) {
+  session_unset();
+  $_SESSION["loginError"] = "Log in first";
   header("location:./login.php");
 }
+
+$userId = $_SESSION["userId"];;
+$location = new Location($db);
+$lastParkedLocation = $location->findLatestFor($userId);
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +71,25 @@ if(!isset($_SESSION["userId"])) {
   <!-- about section, done -->
   <section class="page-section bg-primary" id="map-section">
     <div class="container">
+
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <button type="button" class="btn btn-secondary" onClick="dashboard.uploadLocation();">I Just Parked</button>
+        </div>
+      </div>
+<?php
+      echo "<div class='row'>";
+      echo "  <div class='col-lg-8 offset-lg-2'>";
+      echo "    <p id='message-box'>";
+
+      if(empty($lastParkedLocation)) {
+      echo "No Stored Parked Car Location";
+      }
+      
+      echo "    </p>";
+      echo "  </div>";
+      echo "</div>";
+?>
       <div class="row">
         <div class="col-lg-8 offset-lg-2">
           <div id="map" style="height: 500px"></div>
@@ -64,8 +97,7 @@ if(!isset($_SESSION["userId"])) {
       </div>
     </div>
   </section>
-    
-  <section class="page-section" id="directions-section">
+    <section class="page-section" id="directions-section">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 offset-lg-2">
@@ -96,87 +128,21 @@ if(!isset($_SESSION["userId"])) {
   <script src="js/creative.min.js"></script>
 
 
-  <script>
-  function initMap() {
-    var myLatLng = {lat: 39.9526, lng: -75.1652};
-  
-    var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-      center: myLatLng
-      });
-  
-      var directionsService = new google.maps.DirectionsService;
-      var directionsRenderer = new google.maps.DirectionsRenderer({
-      draggable: true,
-        map: map,
-        panel: document.getElementById('right-panel')
-      });
-  
-      directionsRenderer.addListener('directions_changed', function() {
-        computeTotalDistance(directionsRenderer.getDirections());
-      });
-  
-      displayRoute('Temple University', 'Broad street & Cecil B. Moore', directionsService,
-        directionsRenderer);
-    }
-  
-    function displayRoute(origin, destination, service, display) {
-      service.route({
-      origin: origin,
-        destination: destination,
-        travelMode: 'WALKING',
-        avoidTolls: true
-      }, function(response, status) {
-        if (status === 'OK') {
-          display.setDirections(response);
-        } else {
-          alert('Could not display directions due to: ' + status);
-        }
-        });
-    }
-  
-    function computeTotalDistance(result) {
-      var total = 0;
-      var myroute = result.routes[0];
-      for (var i = 0; i < myroute.legs.length; i++) {
-        total += myroute.legs[i].distance.value;
-      }
-      total = total / 1000;
-      document.getElementById('total').innerHTML = total + ' km';
-    }
-    // Try HTML5 geolocation.
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              var pos = {
-              lat: position.coords.latitude,
-                lng: position.coords.longitude
-              };
-        var infoWindow = new google.maps.InfoWindow();
-              infoWindow.setPosition(pos);
-              infoWindow.setContent('My Location!');
-              infoWindow.open(map);
-              map.setCenter(pos);
-            }, function() {
-              handleLocationError(true, infoWindow, map.getCenter());
-            });
-          } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-          }
-  
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      infoWindow.setPosition(pos);
-      infoWindow.setContent(browserHasGeolocation ?
-        'Deafult: Philadelphia City Hall' :
-        'Your browser doesn\'t support geolocation');
-      infoWindow.open(map);
-      }
-  </script>
+  <script src="js/app.js"></script>
 
 
-  <?php
-    echo "<script async defer src='https://maps.googleapis.com/maps/api/js?key=" . GOOGLE_KEY . "&callback=initMap'></script>";
-  ?>
+<?php
+echo "<script async defer src='https://maps.googleapis.com/maps/api/js?key=" . GOOGLE_KEY . "&callback=initializeApp'></script>";
+?>
+
+<?php
+  echo "<script>";
+  echo "  window.lastParkedLocation=$lastParkedLocation;";
+  echo "  window.baseUrl='". BASE_URL . "';";
+  echo "</script>";
+    
+?>
+ 
 
 </body>
 

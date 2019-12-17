@@ -16,37 +16,33 @@ session_start();
 
 if(empty($_SESSION)) {
   http_response_code(401);
-  echo "No Active Session";
+  echo "{error: 'No Active Session' }";
   exit;
 }
 
 $userId = $_SESSION["userId"];
 if(empty($userId)) {
   http_response_code(401);
-  echo "Not Authenticated";
+  echo "{error: Not Authenticated' }";
   exit;
 }
 
 $location = new Location($db);
 
-$latitude = (float)$_POST["latitude"];
-$longitude = (float)$_POST["longitude"];
+$latitude = (float)$_POST["lat"];
+$longitude = (float)$_POST["lng"];
 
 $success = false;
 if(!(empty($latitude) || empty($longitude))) {
   $success = $location->create($latitude, $longitude, $userId);
 }
 
-var_dump($latitude);
-var_dump($longitude);
-var_dump($userId);
-
 if($success) {
   http_response_code(200);
-  echo "Success";
+  echo "{}";
 } else {
   http_response_code(500);
-  echo "Failed to save location";
+  echo "{ error: 'Failed to save location' }";;
 }
 
 ?>

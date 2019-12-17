@@ -24,8 +24,8 @@ class location {
       while($row = $result->fetch_assoc()) {
         $locations[] = array(
           "id"=>$row["id"],
-          "latitude"=>$row["latitude"],
-          "longitude"=>$row["longitude"],
+          "lat"=>(float)$row["latitude"],
+          "lng"=>(float)$row["longitude"],
           "date"=>$row["date"],
           "userId"=>$row["userId"]
         );
@@ -48,8 +48,8 @@ class location {
     while($stmt->fetch()) {
       $locations[] = array(
         "id"=>$id,
-        "latitude"=>$latitude,
-        "longitude"=>$longitude,
+        "lat"=>(float)$latitude,
+        "lng"=>(float)$longitude,
         "date"=>$date,
         "userId"=>$userId,
       );
@@ -67,19 +67,17 @@ class location {
     $stmt->execute();
     $stmt->bind_result($id, $latitude, $longitude, $date, $userId);
 
-    $location = json_decode('{}');
+    $location = array();
 
     if($stmt->fetch()) {
-      $location = array(
-        "id"=>$id,
-        "latitude"=>$latitude,
-        "longitude"=>$longitude,
-        "date"=>$date,
-      );
+      $location["id"] = $id;
+      $location["lat"] = (float)$latitude;
+      $location["lng"] = (float)$longitude;
+      $location["date"] = $date;
     }
 
     $stmt->close();
-    return $location;
+    return json_encode($location);
   }
 
   public function create($latitude, $longitude, $userId) {

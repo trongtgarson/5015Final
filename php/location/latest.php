@@ -9,29 +9,22 @@ header("Access-Control-Allow-Methods: GET");
 include_once '../config/database.php';
 include_once '../model/location.php';
 
-$database = new Database();
-$db = $database->getConnection();
-
 session_start();
 
-if(empty($_SESSION)) {
-  http_response_code(401);
-  echo "No Active Session";
-  exit;
+if(!isset($_SESSION["userId"])) {
+  session_unset();
+  $_SESSION["loginError"] = "Log in first";
+  header("location:./login.php");
 }
 
-$userId = $_SESSION["userId"];
-if(empty($userId)) {
-  http_response_code(401);
-  echo "Not Authenticated";
-  exit;
-}
-
+$database = new Database();
+$db = $database->getConnection();
 $location = new Location($db);
 
-$locations = $location->findLatestFor($userId);
+$userId = $_SESSION["userId"];;
 
-http_response_code(200);
-echo json_encode($locations);
+$lastParkedLocation = $location->findLatestFor($userId);
+
+echo $lastParkedLocation
 
 ?>
