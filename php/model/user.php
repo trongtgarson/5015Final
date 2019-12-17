@@ -103,7 +103,7 @@ class User {
 			$mail->setFrom(FROM_EMAIL, FROM_NAME); // Change to your email and name
 			$mail->addReplyTo(REPLY_EMAIL, REPLY_NAME); // Change to your email and name
 
-			$msg = "Please click link to complete registration: " . BASE_URL . "php/activate.php?username=$username&activationCode=$activationCode";
+			$msg = "Please click link to complete registration: " . BASE_URL . "php/user/activate.php?username=$username&activationCode=$activationCode";
 
 			$mail->addAddress($username, $user["contactName"]);
 			$mail->Subject = "Welcome to WhereIsMyCar?";

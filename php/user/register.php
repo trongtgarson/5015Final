@@ -41,10 +41,10 @@ if(empty($user->find($username))) {
   if($user->create($username, $password, $contactName)) {
 
     if($user->sendActivationCode($username)) {
-      registerFailed("Failed to send registration email.");
-    } else {
       $_SESSION["message"] = "Activation email sent.";
       header("location:../../index.php");
+    } else {
+      registerFailed("Failed to send registration email.");
     }
   } else {
     registerFailed("Failed to create user");
