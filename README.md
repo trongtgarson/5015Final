@@ -1,53 +1,45 @@
-# API
+# How it all works
 
-`{BASE_URL}` is wherever the site where the code lives. Something like `https://cis-linux2.temple.edu/YOUR_ID/5015/Final/`
+## Backend
 
-All of the POST calls are using `$_POST` to retrieve the parameters. This means they have to be
-submitted as a form encoded request. If we want to just use a JSON body instead that can be changed.
+The app is backed by a MySQL database. We only have 2 tables, one for Users and one for Locations.
+Users contains contact information and login credentials. Locations contain lat/long pairs, a timestamp
+and are linked back to the Users table so that we can identify who they belong to. The Timestamp is used to
+find the latest.
 
-We probably need to build on these requests to return the UI when that is ready rather than just
-a list of data.
+We used MySqlWorkbench to create the tables. SQL code for it can be found in the `sql/` folder.
 
-## Users
+Backend code is written in php and is split into 2 layers. The lower layer deals with accessing database tables
+in a meaningful way. This code is found under `php/model/user.php` and `php/model/location.php`. This is the code
+that actually runs SQL statements against the database and formats the results into PHP arrays.
 
-### `GET {BASE_URL}/php/user/list.php`
+The next layer up is responsible for performing operations with that data. This includes finding and creating locations,
+registering and logging in users and things like that. That code is found under `php/user/*` and `php/location/*`. Each file
+represents one operation. They use the `header` function to redirect to different UI pages as needed.
 
-Returns a list of all users. This isn't really useful.
-
-### `POST {BASE_URL}/php/user/create.php`
-
-This assumes it's being POSTed by a form. Expectes 2 form inputs with names `username` and `password`.
-This will create a user object that we can link locations against. This will go away or change a lot
-when OAuth is implemented. For now it's the minimum needed to make other stuff work.
-
-### `POST {BASE_URL}/php/user/login.php`
-Also requires a form POST with `username` and `password`. If it finds a user and the password
-is correct then a new Session is started.
+All of the configuration is in `php/config/core.php`. There is a helper for creating database connections in
+`php/config/database.php`.
 
 
-### `POST {BASE_URL}/php/user/logout.php`
-Destroys an active session if one exists.
+## Frontend
 
+The UI pages are all contained in the root of the project and include `index.php`, `login.php`, `register.php`, `activate.php` and `dashboard.php`.
 
-## Location
+The UI uses Bootstrap and JQuery along with the `Creative` Bootstrap template we downloaded from the internet.
 
-### `GET {BASE_URL}/php/location/list.php`
+`index.php` is the main page.
+`login.php` shows a login form, and POSTs to `php/user/login.php` which then redirects the user as appropriate. Either
+on to `dashboard.php` or back to `login.php` with and error message.
+`register.php` shows a registration form that lets a person sign up. After signup they are emailed a link to `php/user/activate.php` which redirects them to the correct place if the activation link works or not.
 
-Returns a list of all locations. This isn't really useful.
+Javascript for the dashboard lives in `js/app.js`. It interacts with the Google Maps api. When `dashboard.php` is
+rendered, we pull the latest location from the database and include it in the page so the map can show it.
 
-### `GET {BASE_URL}/php/location/mine.php`
+## User activation
 
-Returns a list of all previous locations for the logged in user. This isn't really useful.
+When a user is created, we create a random activationCode and store it in the database. This is sent to them in an email link
+that they need to click. When the linked page loads, we get their email and activationCode from the link in `$_GET` and
+check it against the stored values. If it's correct, we set `activatedAt` -- we make sure they have an `activatedAt`
+timestamp set before we let the user log in.
 
-### `GET {BASE_URL}/php/location/latest.php`
-
-Returns the most recent location stored for the logged in user.
-
-### `POST {BASE_URL}/php/location/create.php`
-
-Fails if there is no Session (e.g. not logged in)
-
-Expects a form POST with 2 field `latitude` and `longitude`. Each of these will store up to 6 
-decimal places of precision. 
-
-Stores a new location against the logged in user for the given location and time of submission.
+The email link goes to `/php/user/activate.php`
