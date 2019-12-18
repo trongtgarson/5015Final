@@ -48,6 +48,9 @@
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
             </li>
+            <li class="nav-item">
+			        <a class="nav-link js-scroll-trigger" href="#userguide">User Guide</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -151,6 +154,23 @@
           </div>
         </div>
     </section>
+
+    <!--User Guide Section -->
+	  <section class="page-section" id="userguide">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+              <h1 class="text-black-75 font-weight-light mb-5">User Guide: How to Use our Web Service </h1>
+              <hr class="divider my-4">
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+              <p class="text-black-75 font-weight-light mb-5">Welcome! Please register if it's your first time visiting our site or login using the email and password you used when you registered. After this first step a map should pop up on your screen, if not, click on the "Where is my Car?" heading on the top left-hand corner of your screen. You should see two buttons, one that says "I Just Parked" and the other that says "Refresh Directions". After you found your parking spot, just click on the "I Just Parked" button so we can save your parking location. After you do this, you should see a point "A" and a point "B". Point "A" refers to where you parked your car and point "B" refers to your current location. When you're ready to find your car, click on the "Refresh Directions" button so you can have an updated route showing you how to get back to your car!</p>
+              <p class="text-black-75 font-weight-light mb-5">If you have any questions, don't feel afraid to contact one of us (refer to the "Contact" section) and we will do our best to help you enjoy your experience using our service! Have a wonderful day!</p>
+            </div>
+          </div>
+        </div>
+	  </section>
+
 
     <!-- Footer -->
     <footer class="bg-light py-5">

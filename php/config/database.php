@@ -13,6 +13,7 @@ class Database {
       $this->conn->set_charset("utf8");
     } catch(Exception $e) {
       error_log($e->getMessage());
+      echo($e->getMessage());
       exit("Failed to connect to database");
     }
 
